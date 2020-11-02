@@ -28,14 +28,14 @@ func login (c *gin.Context) {
 
 func main () {
 	r := gin.Default()
-
 	r.GET("/", func(c *gin.Context) {
 		username := c.Query("username")
-
 		c.JSON(200, gin.H{
 			"msg" : "hello " + username,
 		})
 	})
+
+	r.POST("/login", login)
 
 	r.Run(":8081")
 }
