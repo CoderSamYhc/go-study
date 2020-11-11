@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <books version="1">
+   <book>
+     <bookName>golang实战</bookName>
+     <bookPrice>$450</bookPrice>
+   </book>
+   <book>
+     <bookName>三体</bookName>
+     <bookPrice>$150</bookPrice>
+   </book>
+   <test>
+     <itemName>123</itemName>
+     <itemArgs>456</itemArgs>
+   </test>
+   <test>
+     <itemName>31</itemName>
+     <itemArgs>426</itemArgs>
+   </test>
+ </books>
