@@ -15,10 +15,33 @@ type Student struct {
 func main() {
 	//testStruct()
 	//testMap()
-	testSlice()
+	//testSlice()
 	//unmarshalStruct()
 	//unmarshalMap()
 	//unmarshalSlice()
+
+	jsonStr := `{"Name":"Lisi","Age":6,"Parents":["Lisan","WW"]}`
+	jsonBytes := []byte(jsonStr)
+
+	var i interface{}
+	json.Unmarshal(jsonBytes, &i)
+	fmt.Println(i) // map[Age:6 Name:Lisi Parents:[Lisan WW]]
+
+	m := i.(map[string]interface{})
+	for k, v := range m {
+		switch r := v.(type) {
+		case string:
+			fmt.Println(k, " string ", r)
+		case int:
+			fmt.Println(k, " int ", r)
+		case []interface{}:
+			fmt.Println(k, " array ", r)
+		default:
+			fmt.Println("cannot be type")
+		}
+	}
+
+	fmt.Println(m["Age"])
 }
 
 func testStruct() {

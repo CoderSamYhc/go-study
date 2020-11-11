@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"studented/array/sort"
+	"go-study/array/sort"
 )
 
 func main() {
