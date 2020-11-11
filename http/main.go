@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
 )
 
 func helloWorld (w http.ResponseWriter, r *http.Request) {
@@ -24,6 +26,35 @@ func index(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("./public/html/index.html")
 	t.Execute(w, "hello golang")
 }
+
+func upload(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.Method)
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("./public/html/upload.html")
+		t.Execute(w, "")
+	} else {
+		// 设置上传 内存使用大小，超过了，则存储在系统临时文件中
+		r.ParseMultipartForm(32 << 20)
+
+		file, handle, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println("upload err:", err)
+			return
+		}
+		defer file.Close()
+		fmt.Fprintf(w, "%v", handle.Header)
+
+		f, err := os.OpenFile("./public/Upload/" + handle.Filename, os.O_CREATE | os.O_WRONLY, 0666)
+		if err != nil {
+			fmt.Println("upload err:", err)
+			return
+		}
+		defer f.Close()
+		io.Copy(f, file)
+	}
+
+}
+
 func handleFunc() {
 	http.HandleFunc("/hello/", helloWorld)
 	http.HandleFunc("/", index)
@@ -32,8 +63,9 @@ func handleFunc() {
 func muxFunc() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/hello/", helloWorld) // /hello 会响应helloWorld方法，/hello/会响应index方法
+	mux.HandleFunc("/upload", upload) // /hello 会响应helloWorld方法，/hello/会响应index方法
 	mux.HandleFunc("/", before(index))
-	return mux;
+	return mux
 }
 
 func before(handle http.HandlerFunc) http.HandlerFunc {
