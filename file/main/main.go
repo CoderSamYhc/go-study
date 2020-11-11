@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"os"
+)
+
 func main() {
 	// file 是文件的地址
 	//var file, err = os.Open("content.text")
@@ -79,5 +84,11 @@ func main() {
 	//if  !rs {
 	//	fmt.Println("存在")
 	//}
+
+	p, err := os.Executable()
+	if err != nil {
+		fmt.Println("err", err)
+	}
+	fmt.Println(p)
 
 }
